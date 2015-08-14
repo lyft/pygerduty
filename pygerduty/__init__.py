@@ -526,7 +526,7 @@ class PagerDuty(object):
         self.log_entries = LogEntries(self)
 
     def create_event(self, service_key, description, event_type,
-                     details, incident_key, **kwargs):
+                     details, incident_key, contexts=None, **kwargs):
 
         # Only assign client/client_url if they exist, only for trigger_incident
         client = kwargs.pop('client', None)
@@ -542,6 +542,7 @@ class PagerDuty(object):
             "description": description,
             "details": details,
             "incident_key": incident_key,
+            "contexts": contexts,
             "client": client,
             "client_url": client_url
         }
@@ -575,16 +576,16 @@ class PagerDuty(object):
         return self.create_event(service_key, description, "acknowledge",
                                  details, incident_key)
 
-    def trigger_incident(self, service_key, description,
-                         incident_key=None, details=None,
-                         client=None, client_url=None):
+    def trigger_incident(self, service_key, description, incident_key=None,
+                         details=None, contexts=None, client=None,
+                         client_url=None):
         """ Report a new or ongoing problem. When PagerDuty receives a trigger,
         it will either open a new incident, or add a new log entry to an
         existing incident.
         """
 
-        return self.create_event(service_key, description, "trigger",
-                                 details, incident_key,
+        return self.create_event(service_key, description, "trigger", details,
+                                 incident_key, contexts=contexts,
                                  client=client, client_url=client_url)
 
     def execute_request(self, request):
