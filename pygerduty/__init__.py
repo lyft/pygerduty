@@ -409,6 +409,10 @@ class Incident(Container):
         self._do_action('reassign', requester_id=requester_id, assigned_to_user=','.join(user_ids))
 
 
+class Webhook(Container):
+    pass
+
+
 class Note(Container):
     pass
 
